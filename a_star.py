@@ -31,9 +31,20 @@ def a_star(puzzle):
     prev = {initial.to_string(): None}
 
     while len(fringe) > 0:
-        # remove the following line and complete the algorithm
-        assert False
-
+        current_heuristic, current_state = heapq.heappop(fringe)
+        concluded.add(current_state.to_string())
+        if current_state == goal:
+            break
+        else:
+            for action in current_state.get_actions():
+                next_state = current_state.apply_action(action)
+                if next_state.to_string() not in concluded:
+                    dist = distances[current_state.to_string()] + 1
+                    distances[next_state.to_string()] = dist
+                    next_heuristic = goal.get_manhattan_distance(next_state)
+                    heapq.heappush(fringe, (next_heuristic + dist, next_state))
+                    prev[next_state.to_string()] = current_state
+                    concluded.add(next_state.to_string())
     return prev
 
 
@@ -49,6 +60,10 @@ def solve(puzzle):
 if __name__ == '__main__':
     # we create some start and goal states. the number of actions between them is 25 although a shorter plan of
     # length 19 exists (make sure your plan is of the same length)
+
+    # initial_state = State('0 1 2\r\n3 4 5\r\n6 7 8')
+    # goal_state = State('8 6 7\r\n2 5 4\r\n3 0 1')
+
     initial_state = State()
     actions = [
         'r', 'r', 'd', 'l', 'u', 'l', 'd', 'd', 'r', 'r', 'u', 'l', 'd', 'r', 'u', 'u', 'l', 'd', 'l', 'd', 'r', 'r',

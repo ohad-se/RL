@@ -79,6 +79,15 @@ class State:
             total_distance += diff
         return total_distance
 
+    # def get_manhattan_distance(self, other):
+    #     total_distance = 0
+    #     for i in range(1, 9):
+    #         self_location = self._get_location_char(str(i))
+    #         other_location = other._get_location_char(str(i))
+    #         diff = 1 - int(self_location == other_location)
+    #         total_distance += diff
+    #     return total_distance
+
     def is_same(self, other):
         return self.get_manhattan_distance(other) == 0
 

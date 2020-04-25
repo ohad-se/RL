@@ -28,10 +28,20 @@ def dijkstra(puzzle):
     prev = {initial.to_string(): None}
 
     while len(fringe) > 0:
-        # remove the following line and complete the algorithm
-        assert False
+        current_distance, current_state = heapq.heappop(fringe)
+        if current_state == goal:
+            break
+        else:
+            if current_state.to_string() not in concluded:
+                concluded.add(current_state.to_string())
+                distances[current_state.to_string()] = current_distance
+                for action in current_state.get_actions():
+                    next_state = current_state.apply_action(action)
+                    if next_state.to_string() not in concluded:
+                        next_dist = current_distance + 1
+                        heapq.heappush(fringe, (next_dist, next_state))
+                        prev[next_state.to_string()] = current_state
     return prev
-
 
 def solve(puzzle):
     # compute mapping to previous using dijkstra
@@ -45,6 +55,9 @@ def solve(puzzle):
 if __name__ == '__main__':
     # we create some start and goal states. the number of actions between them is 25 although a shorter plan of
     # length 19 exists (make sure your plan is of the same length)
+    # initial_state = State('0 1 2\r\n3 4 5\r\n6 7 8')
+    # goal_state = State('8 6 7\r\n2 5 4\r\n3 0 1')
+
     initial_state = State()
     actions = [
         'r', 'r', 'd', 'l', 'u', 'l', 'd', 'd', 'r', 'r', 'u', 'l', 'd', 'r', 'u', 'u', 'l', 'd', 'l', 'd', 'r', 'r',
@@ -53,6 +66,7 @@ if __name__ == '__main__':
     goal_state = initial_state
     for a in actions:
         goal_state = goal_state.apply_action(a)
+
     puzzle = Puzzle(initial_state, goal_state)
     print('original number of actions:{}'.format(len(actions)))
     solution_start_time = datetime.datetime.now()
