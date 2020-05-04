@@ -137,7 +137,7 @@ if __name__ == '__main__':
             actual_theta = actual_state[2]
             actual_theta_list.append(actual_theta) # added for plotting by us
             predicted_action = us[iteration].item(0)
-            actual_action = (Ks[iteration] @ np.expand_dims(actual_state, 1)).item(0)
+            actual_action = (Ks[iteration] * np.expand_dims(actual_state, 1)).item(0)
             print_diff(iteration, predicted_theta, actual_theta, predicted_action, actual_action)
             # apply action according to actual state visited
             # make action in range
